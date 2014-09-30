@@ -1,0 +1,285 @@
+Sleet, rain, snow, and hail are forms of (A) erosion  (B) evaporation  (C) groundwater  (D) precipitation
+A:
+*(sleet, isa, erosion)
+*(rain, isa, erosion)
+*(snow, isa, erosion)
+B:
+*(sleet, isa, evaporation)
+*(rain, isa, evaporation)
+*(snow, isa, evaporation)
+C:
+*(sleet, isa, groundwater)
+*(rain, isa, groundwater)
+*(snow, isa, groundwater)
+D:+
+(sleet, isa, precipitation)
+(rain, isa, precipitation)
+(snow, isa, precipitation)
+
+Which characteristic can a human offspring inherit? (A) facial scar  (B) blue eyes  (C) long hair  (D) broken leg
+A:
+*(offspring, inherit, scar)
+B:+
+(offspring, inherit, eye)
+C:
+*(offspring, inherit, hair)
+D:
+*(offspring, inherit, leg)
+
+The functions of a plant's roots are to support the plant and (A) make food (B) produce fruit  (C) take in water and nutrients  (D) aid in germination
+A:
+*(root, make, food)
+B:
+*(root, produce, fruit)
+C:+
+(root, take in, water)
+(root, take in, nutrient)
+D:
+*(root, aid in, germination)
+
+Which food is a fruit? (A) a potato  (B) an onion  (C) a carrot  (D) a pumpkin
+A:
+*(potato, isa, fruit)
+B:
+*(onion, isa, fruit)
+C:
+*(carrot, isa, fruit)
+D:+
+(pumpkin, isa, fruit)
+
+Which part of a plant produces the seeds? (A) flower  (B) leaves  (C) stem  (D) roots
+A:+
+(flower, produce, seed)
+B:
+*(leaf, produce, seed)
+C:
+*(stem, produce, seed)
+D:
+*(roots, produce, seed)
+
+Which instrument would be best to measure the volume of a liquid? (A) a pan balance  (B) a stopwatch  (C) a thermometer  (D) a graduated cylinder
+A:
+*(balance, measure, volume)
+B:
+*(stopwatch, measure, volume)
+C:
+*(thermometer, measure, volume)
+D:+
+(cylinder, measure, volume)
+
+What is the main function of scales on a fish? (A) to protect the fish  (B) to attract predators  (C) to help the fish find food  (D) to help the fish breathe
+A:+
+(scale, protect, fish)
+B:
+*(scale, attract, predator)
+C:
+*(scale, help find, food)
+D:
+*(scale, help, breathe)
+
+Which substance is usually found in nature as a liquid, solid, and gas? (A) water  (B) rock  (C) metal  (D) glass
+A:+
+(water, found as, liquid)
+(water, found as, solid)
+(water, found as, gas)
+B:
+*(rock, found as, liquid)
+(rock, found as, solid)
+*(rock, found as, gas)
+C:
+*(metal, found as, liquid)
+(metal, found as, solid)
+*(metal, found as, gas)
+D:
+*(glass, found as, liquid)
+(glass, found as, solid)
+*(glass, found as, gas)
+
+A student is growing some plants for an experiment. She notices small white spots on the leaves. Which tool should she use to get a better look at the spots? (A) thermometer  (B) hand lens  (C) graduated cylinder  (D) balance
+A:
+*(student, look with, thermometer)
+B:+
+(student, look with, lens)
+C:
+*(student, look with, cylinder)
+D:
+*(student, look with, balance)
+
+Sleet and hail are forms of (A) clouds  (B) energy  (C) evaporation  (D) precipitation
+A:
+*(sleet, isa, cloud)
+*(hail, isa, cloud)
+B:
+*(sleet, isa, energy)
+*(hail, isa, energy)
+D:
+*(sleet, isa, evaporation)
+*(hail, isa, evaporation)
+D:+
+(sleet, isa, precipitation)
+(hail, isa, precipitation)
+
+Which tool is used to measure the volume of a liquid? (A) balance  (B) ruler  (C) thermometer  (D) graduated cylinder
+A:
+*(balance, measure, volume)
+B:
+*(ruler, measure, volume)
+C:
+*(thermometer, measure, volume)
+D:+
+(cylinder, measure, volume)
+
+Which tool should a student use to compare the masses of two small rocks? (A) balance  (B) hand lens  (C) ruler  (D) measuring cup
+A:+
+(balance, compare, mass)
+B:
+*(lens, compare, mass)
+C:
+*(ruler, compare, mass)
+D:
+*(cup, compare, mass)
+
+Which object is the best conductor of electricity? (A) metal fork  (B) rubber boot  (C) plastic spoon  (D) wooden bat
+A:+
+(fork, is conductor of, electricity)
+B:
+*(boot, is conductor of, electricity)
+C:
+*(spoon, is conductor of, electricity)
+D:
+*(bat, is conductor of, electricity)
+
+Which unit of measurement can be used to describe the length of a desk? (A) centimeters  (B) grams  (C) liters  (D) degrees Celsius
+A:+
+(centimeter, describe, length)
+B:
+*(gram, describe, length)
+C:
+*(liter, describe, length)
+D:
+*(celsius, describe, length)
+
+Which instrument should a student use to measure exactly 10 milliliters (mL) of water? (A) graduated cylinder  (B) pan balance  (C) ruler  (D) thermometer
+A:+
+(cylinder, measure, milliliter)
+B:
+*(balance, measure, milliliter)
+C:
+*(ruler, measure, milliliter)
+D:
+*(thermometer, measure, milliliter)
+
+A decomposer is an organism that (A) preys on other animals  (B) eats only plants  (C) recycles nutrients  (D) uses sunlight to make food
+A:
+*(decomposer, prey on, animal)
+B:
+*(decomposer, eat, plant)
+C:+
+(decomposer, recycle, nutrient)
+D:
+*(decomposer, use, sunlight)
+
+Since green plants make their own food, they are called (A) predators  (B) prey  (C) decomposers  (D) producers
+A:
+*(plant, isa, predator)
+*(predator, make, food)
+B:
+*(plant, isa, prey)
+*(prey, make, food)
+C:
+*(plant, isa, decomposers)
+*(decomposer, make, food)
+D:+
+(plant, isa, producer)
+(producer, make, food)
+
+Humans depend on which natural resource from the environment? (A) water  (B) houses  (C) electricity  (D) roads
+A:+
+(human, depend on, water)
+(water, isa, resource)
+(water, is from, environment)
+B:
+(human, depend on, house)
+*(house, isa, resource)
+*(house, is from, environment)
+C:
+(human, depend on, electricity)
+*(electricity, isa, resource)
+*(electricity, is from, environment)
+D:
+(human, depend on, road)
+*(road, isa, resource)
+*(road, is from, environment)
+
+Which characteristic can a puppy inherit from its parents? (A) muddy paws  (B) spotted fur  (C) broken foot  (D) scar on face
+A:
+*(puppy, inherit, paw)
+*(paw, inherit from, parent)
+B:+
+(puppy, inherit, fur)
+(fur, inherit from, parent)
+C:
+*(puppy, inherit, foot)
+*(foot, inherit from, parent)
+D:
+*(puppy, inherit, scar)
+*(face, inherit from, parent)
+
+Which two observations are both used to describe weather? (A) precipitation and runoff(B) temperature and sky conditions(C) wind speed and erosion(D) types of clouds and deposition
+A:
+(precipitation, describe, weather)
+*(runoff, describe, weather)
+B:+
+(temperature, describe, weather)
+(condition, describe, weather)
+C:
+(speed, describe, weather)
+*(erosion, describe, weather)
+D:
+(type, describe, weather)
+*(deposition, describe, weather)
+
+Which unit of measurement describes an object's length? (A) meter(B) kilogram(C) liter(D) degree
+A:+
+(meter, describe, length)
+B:
+*(kilogram, describe, length)
+C:
+*(liter, describe, length)
+D:
+*(degree, describe, length)
+
+Which sense is used to determine an object's texture? (A) hearing(B) smell(C) taste(D) touch
+A:
+*(hear, determine, texture)
+B:
+*(smell, determine, texture)
+C:
+*(taste, determine, texture)
+D:+
+(touch, determine, texture)
+
+Which object is nonliving? (A) bear(B) bicycle(C) bird(D) butterfly
+A:
+*(bear, isa, nonlive)
+B:+
+(bicycle, isa, nonlive)
+C:
+*(bird, isa, nonlive)
+D:
+*(butterfly, isa, nonlive)
+
+A decomposer is an organism that (A) hunts and eats animals(B) migrates for the winter(C) breaks down dead plants and animals(D) uses water and sunlight to make food
+A:
+*(decomposer, hunt, animal)
+*(decomposer, eat, animal)
+B:
+*(decomposer, migrate for, winter)
+C:+
+(decomposer, break down, plant)
+(decomposer, break down, animal)
+D:
+*(decomposer, use, water)
+*(decomposer, use, sunlight)
+*(decomposer, make, food)
+
