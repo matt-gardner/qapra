@@ -79,21 +79,21 @@ D:
 
 Which substance is usually found in nature as a liquid, solid, and gas? (A) water  (B) rock  (C) metal  (D) glass
 A:+
-(water, found as, liquid)
-(water, found as, solid)
-(water, found as, gas)
+(water, find as, liquid)
+(water, find as, solid)
+(water, find as, gas)
 B:
-*(rock, found as, liquid)
-(rock, found as, solid)
-*(rock, found as, gas)
+*(rock, find as, liquid)
+(rock, find as, solid)
+*(rock, find as, gas)
 C:
-*(metal, found as, liquid)
-(metal, found as, solid)
-*(metal, found as, gas)
+*(metal, find as, liquid)
+(metal, find as, solid)
+*(metal, find as, gas)
 D:
-*(glass, found as, liquid)
-(glass, found as, solid)
-*(glass, found as, gas)
+*(glass, find as, liquid)
+(glass, find as, solid)
+*(glass, find as, gas)
 
 A student is growing some plants for an experiment. She notices small white spots on the leaves. Which tool should she use to get a better look at the spots? (A) thermometer  (B) hand lens  (C) graduated cylinder  (D) balance
 A:
