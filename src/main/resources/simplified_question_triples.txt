@@ -141,13 +141,13 @@ D:
 
 Which object is the best conductor of electricity? (A) metal fork  (B) rubber boot  (C) plastic spoon  (D) wooden bat
 A:+
-(fork, is conductor of, electricity)
+(fork, be conductor of, electricity)
 B:
-*(boot, is conductor of, electricity)
+*(boot, be conductor of, electricity)
 C:
-*(spoon, is conductor of, electricity)
+*(spoon, be conductor of, electricity)
 D:
-*(bat, is conductor of, electricity)
+*(bat, be conductor of, electricity)
 
 Which unit of measurement can be used to describe the length of a desk? (A) centimeters  (B) grams  (C) liters  (D) degrees Celsius
 A:+
@@ -178,6 +178,7 @@ C:+
 (decomposer, recycle, nutrient)
 D:
 *(decomposer, use, sunlight)
+*(decomposer, make, food)
 
 Since green plants make their own food, they are called (A) predators  (B) prey  (C) decomposers  (D) producers
 A:
@@ -187,7 +188,7 @@ B:
 *(plant, isa, prey)
 *(prey, make, food)
 C:
-*(plant, isa, decomposers)
+*(plant, isa, decomposer)
 *(decomposer, make, food)
 D:+
 (plant, isa, producer)
@@ -197,19 +198,19 @@ Humans depend on which natural resource from the environment? (A) water  (B) hou
 A:+
 (human, depend on, water)
 (water, isa, resource)
-(water, is from, environment)
+(water, be from, environment)
 B:
 (human, depend on, house)
 *(house, isa, resource)
-*(house, is from, environment)
+*(house, be from, environment)
 C:
 (human, depend on, electricity)
 *(electricity, isa, resource)
-*(electricity, is from, environment)
+*(electricity, be from, environment)
 D:
 (human, depend on, road)
 *(road, isa, resource)
-*(road, is from, environment)
+*(road, be from, environment)
 
 Which characteristic can a puppy inherit from its parents? (A) muddy paws  (B) spotted fur  (C) broken foot  (D) scar on face
 A:
