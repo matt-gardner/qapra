@@ -4,7 +4,7 @@ import java.io.File
 
 object QuestionComparer {
   val user_home = System.getProperty("user.home")
-  val simplified_question_triple_file = s"${user_home}/ai2/misc/simplified_question_triples.txt"
+  val simplified_question_triple_file = s"simplified_question_triples.txt"
   val results_dir = s"${user_home}/ai2/pra/results/"
 
 

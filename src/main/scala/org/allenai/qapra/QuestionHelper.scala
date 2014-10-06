@@ -19,7 +19,7 @@ case class Answer(answer: String, correct: Boolean, choice_scores: List[ChoiceSc
 object QuestionHelper {
 
   def readScores(results_dir: File) = {
-    val scores_files = PraFileHelper.recursiveListFiles(results_dir, """.*scores.tsv""".r)
+    val scores_files = PraFileHelper.recursiveListFiles(results_dir, """.*scores.tsv$""".r)
     (scores_files.flatMap(getTripleScoresFromFile).toMap, scores_files.size)
   }
 
@@ -28,7 +28,7 @@ object QuestionHelper {
     val triples = mutable.ListBuffer[TripleWithScore]()
     for (line <- Resource.fromFile(file).lines()) {
       val fields = line.split("\t")
-      if (fields.length > 3 && fields(1).nonEmpty) {
+      if (fields.length > 2 && fields(1).nonEmpty) {
         val arg1 = fields(0)
         val arg2 = fields(1)
         val score = fields(2).toDouble
@@ -110,7 +110,7 @@ object QuestionHelper {
         for (triple <- choice.triples) {
           val triple_score = scores(triple._1)
           score += triple_score
-          triple_scores += Tuple2(triple._1, score)
+          triple_scores += Tuple2(triple._1, triple_score)
         }
         choice_scores += ChoiceScore(triple_scores.toList)
         if (score > max_score) {
