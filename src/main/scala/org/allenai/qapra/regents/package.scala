@@ -1,6 +1,6 @@
-package org.allenai
+package org.allenai.qapra
 
-package object qapra {
+package object regents {
   // A triple is (arg1, relation, arg2), or (subject, verb, object).
   type Triple = (String, String, String)
   // The assumption here is that the relation is known in a RelationTriple, so you only need to

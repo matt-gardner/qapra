@@ -1,4 +1,4 @@
-package org.allenai.qapra
+package org.allenai.qapra.regents
 
 import java.io.File
 import java.io.PrintWriter

@@ -1,4 +1,4 @@
-package org.allenai.qapra
+package org.allenai.qapra.regents
 
 import scala.collection.mutable
 import scala.collection.JavaConversions._

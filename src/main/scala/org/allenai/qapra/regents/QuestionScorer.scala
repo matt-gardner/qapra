@@ -1,4 +1,4 @@
-package org.allenai.qapra
+package org.allenai.qapra.regents
 
 import edu.cmu.ml.rtw.pra.experiments.BasicMetricComputer
 import edu.cmu.ml.rtw.pra.experiments.ExperimentScorer
@@ -29,8 +29,14 @@ object QuestionScorer {
 
   def main(args: Array[String]) {
     val pra_base = if (args.length > 0) args(0) else pra_base_
-    val filter = if (args.length > 1) args(1) else ""
-    ExperimentScorer.scoreExperiments(pra_base, filter, displayMetrics, sortResultsBy, metricComputers)
+    val filters = args.toList.drop(1)
+    ExperimentScorer.scoreExperiments(pra_base,
+      filters,
+      displayMetrics,
+      sortResultsBy,
+      metricComputers,
+      Seq[String](),
+      Seq[String]())
   }
 }
 
