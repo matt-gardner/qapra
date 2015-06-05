@@ -1,0 +1,63 @@
+package org.allenai.parse
+
+import edu.stanford.nlp.ling.CoreAnnotations
+import edu.stanford.nlp.pipeline.Annotation
+import edu.stanford.nlp.pipeline.StanfordCoreNLP
+import edu.stanford.nlp.parser.lexparser.LexicalizedParser
+import edu.stanford.nlp.process.CoreLabelTokenFactory
+import edu.stanford.nlp.process.PTBTokenizer
+import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation
+import edu.stanford.nlp.trees.ModCollinsHeadFinder
+import edu.stanford.nlp.trees.Tree
+import edu.stanford.nlp.util.CoreMap
+
+import java.io.StringReader
+import java.util.Properties
+
+import scala.collection.JavaConverters._
+
+// A Parser takes sentence strings and returns parsed sentence strings.  It's just a thin
+// abstraction layer over whatever parser you feel like using.
+trait Parser {
+  def parseSentence(sentence: String): ParsedSentence
+}
+
+// Some really simple representations, containing only what I need them to for the rest of this
+// code.
+trait ParsedSentence {
+  def getDependencies: Seq[Dependency]
+  def getPosTags: Seq[PartOfSpeech]
+}
+
+case class PartOfSpeech(word: String, posTag: String)
+case class Dependency(head: String, dependent: String, label: String)
+
+class StanfordParser extends Parser {
+  val props = new Properties()
+  props.put("annotators","tokenize, ssplit, pos, lemma, parse")
+  val pipeline = new StanfordCoreNLP(props)
+
+  override def parseSentence(sentence: String): ParsedSentence = {
+    val annotation = new Annotation(sentence)
+    pipeline.annotate(annotation)
+    new StanfordParsedSentence(annotation.get(classOf[CoreAnnotations.SentencesAnnotation]).get(0))
+  }
+}
+
+class StanfordParsedSentence(sentence: CoreMap) extends ParsedSentence {
+  override def getDependencies() = {
+    val deps = sentence.get(classOf[CollapsedCCProcessedDependenciesAnnotation]).typedDependencies
+    deps.asScala.map(dependency => {
+      Dependency(dependency.gov.label.value, dependency.dep.label.value, dependency.reln.toString)
+    }).toSeq
+  }
+
+  override def getPosTags() = {
+    val tokens = sentence.get(classOf[CoreAnnotations.TokensAnnotation])
+    tokens.asScala.map(token => {
+      val posTag = token.get(classOf[CoreAnnotations.PartOfSpeechAnnotation])
+      val word = token.get(classOf[CoreAnnotations.TextAnnotation])
+      PartOfSpeech(word, posTag)
+    }).toSeq
+  }
+}
