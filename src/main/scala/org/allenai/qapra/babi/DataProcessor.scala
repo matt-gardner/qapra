@@ -13,12 +13,14 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
 
   def createSplit(question_file: String, out_file: String) {
     val questions = extractQuestions(question_file)
-    val instances = questions.flatMap(question => {
-      val source = getSourceNodeFromQuestion(question._1)
+    val instances = questions.zipWithIndex.flatMap(question_idx => {
+      val question = question_idx._1
+      val index = question_idx._2 + 1
+      val source = getSourceNodeFromQuestion(question._1, index)
       val parsedHistory = question._3.map(sentence => parser.parseSentence(sentence))
       val candidates = getCandidatesFromHistory(parsedHistory)
       val questionSentences = candidates.map(convertQuestionAnswerToSentence(question._1))
-      val instanceGraphs = questionSentences.map(getGraphFromQuestion(parsedHistory))
+      val instanceGraphs = questionSentences.map(getGraphFromQuestion(parsedHistory, index))
       candidates.zip(instanceGraphs).map(candidateGraph => {
         val candidate = candidateGraph._1
         val graph = candidateGraph._2
@@ -55,10 +57,10 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
 
   // TODO(matt): this is potentially question-dependent, and could use something less hackish here.
   // For now we just take the first noun we find.
-  def getSourceNodeFromQuestion(question: String): String = {
+  def getSourceNodeFromQuestion(question: String, index: Int): String = {
     val parsed = parser.parseSentence(question)
     val nouns = parsed.getPosTags.filter(_.posTag.contains("NN"))
-    nouns(0).word
+    s"Q${index}:${nouns(0).word}"
   }
 
   // TODO(matt): this is probably question-dependent.  For now, we're just getting all of the
@@ -88,7 +90,8 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
   }
 
   type Edge = (String, String, String)
-  def getGraphFromQuestion(history: Seq[ParsedSentence])(questionSentence: String): Seq[Edge] = {
+  def getGraphFromQuestion(history: Seq[ParsedSentence], questionIndex: Int)
+      (questionSentence: String): Seq[Edge] = {
     val edges = new mutable.ListBuffer[Edge]
 
     // Some processing of the question sentence, as it's an important part of the graph.
@@ -99,7 +102,8 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
     // Now, first we add the dependency edges from the question sentence to the graph.
     parsedQuestion.getDependencies.foreach(dependency => {
       if (dependency.label != "root") {
-        edges += Tuple3(dependency.head, dependency.label, dependency.dependent)
+        edges += Tuple3(s"Q${questionIndex}:${dependency.head}", dependency.label,
+          s"Q${questionIndex}:${dependency.dependent}")
       }
     })
 
@@ -115,7 +119,7 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
       sentence.getPosTags.foreach(posTag => {
         val word = posTag.word
         if (questionWords.contains(word)) {
-          edges += Tuple3(word, "instance", s"${index}:${word}")
+          edges += Tuple3(s"Q${questionIndex}:${word}", "instance", s"${index}:${word}")
           if (lastOccurrences(word) != null) {
             edges += Tuple3(s"${index}:${word}", "last instance", lastOccurrences(word))
           }
@@ -127,7 +131,7 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
     // Lastly, we add the remaining "last instance" edges.
     questionWords.foreach(word => {
       if (lastOccurrences(word) != null) {
-        edges += Tuple3(word, "last instance", lastOccurrences(word))
+        edges += Tuple3(s"Q${questionIndex}:${word}", "last instance", lastOccurrences(word))
       }
     })
 

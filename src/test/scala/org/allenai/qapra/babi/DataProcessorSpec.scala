@@ -63,7 +63,7 @@ class DataProcessorSpec extends FlatSpecLike with Matchers {
   }
 
   "getSourceNodeFromQuestion" should "return the right source node" in {
-    processor.getSourceNodeFromQuestion("Where is Sandra?") should be("Sandra")
+    processor.getSourceNodeFromQuestion("Where is Sandra?", 1) should be("Q1:Sandra")
   }
 
   "getCandidatesFromHistory" should "find all nouns in the question history" in {
@@ -78,11 +78,11 @@ class DataProcessorSpec extends FlatSpecLike with Matchers {
   }
 
   "getGraphFromQuestion" should "construct a decent graph" in {
-    val edges = processor.getGraphFromQuestion(question1_history)("Sandra is in the bathroom")
+    val edges = processor.getGraphFromQuestion(question1_history, 1)("Sandra is in the bathroom")
     edges.toSet should contain theSameElementsAs Set(
-      ("is", "nsubj", "Sandra"),
-      ("is", "prep_in", "bathroom"),
-      ("bathroom", "det", "the"),
+      ("Q1:is", "nsubj", "Q1:Sandra"),
+      ("Q1:is", "prep_in", "Q1:bathroom"),
+      ("Q1:bathroom", "det", "Q1:the"),
       ("1:travelled", "nsubj", "1:Sandra"),
       ("1:travelled", "prep_to", "1:office"),
       ("1:office", "det", "1:the"),
@@ -95,17 +95,17 @@ class DataProcessorSpec extends FlatSpecLike with Matchers {
       ("4:moved", "nsubj", "4:Daniel"),
       ("4:moved", "prep_to", "4:hallway"),
       ("4:hallway", "det", "4:the"),
-      ("Sandra", "instance", "1:Sandra"),
-      ("Sandra", "instance", "2:Sandra"),
-      ("Sandra", "last instance", "2:Sandra"),
+      ("Q1:Sandra", "instance", "1:Sandra"),
+      ("Q1:Sandra", "instance", "2:Sandra"),
+      ("Q1:Sandra", "last instance", "2:Sandra"),
       ("2:Sandra", "last instance", "1:Sandra"),
-      ("bathroom", "instance", "2:bathroom"),
-      ("bathroom", "last instance", "2:bathroom"),
-      ("the", "instance", "1:the"),
-      ("the", "instance", "2:the"),
-      ("the", "instance", "3:the"),
-      ("the", "instance", "4:the"),
-      ("the", "last instance", "4:the"),
+      ("Q1:bathroom", "instance", "2:bathroom"),
+      ("Q1:bathroom", "last instance", "2:bathroom"),
+      ("Q1:the", "instance", "1:the"),
+      ("Q1:the", "instance", "2:the"),
+      ("Q1:the", "instance", "3:the"),
+      ("Q1:the", "instance", "4:the"),
+      ("Q1:the", "last instance", "4:the"),
       ("4:the", "last instance", "3:the"),
       ("3:the", "last instance", "2:the"),
       ("2:the", "last instance", "1:the")
