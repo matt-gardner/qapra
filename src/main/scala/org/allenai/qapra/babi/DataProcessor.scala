@@ -22,7 +22,7 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
       val index = question_idx._2 + 1
       val source = getSourceNodeFromQuestion(question._1, index)
       val parsedHistory = question._3.map(sentence => parser.parseSentence(sentence))
-      val candidates = getCandidatesFromHistory(parsedHistory)
+      val candidates = getCandidatesFromHistory(parsedHistory).toList
       val questionSentences = candidates.map(convertQuestionAnswerToSentence(question._1))
       val instanceGraphs = questionSentences.map(getGraphFromQuestion(parsedHistory, index))
       candidates.zip(instanceGraphs).map(candidateGraph => {
