@@ -11,6 +11,10 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
 
   val parser = new StanfordParser
 
+  // TODO(matt): these should probably be made into public fields in the Dataset object.
+  val intraEdgeSeparator = "^,^"
+  val interEdgeSeparator = " ### "
+
   def createSplit(question_file: String, out_file: String) {
     val questions = extractQuestions(question_file)
     val instances = questions.zipWithIndex.flatMap(question_idx => {
@@ -25,11 +29,29 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
         val candidate = candidateGraph._1
         val graph = candidateGraph._2
         val isPositive = candidate == question._2
-        val instance = (source, candidate, isPositive)
+        val instance = (source, s"Q${index}:${candidate}", isPositive)
         (instance, graph)
       })
     })
-    // TODO(matt): output split
+    val writer = fileUtil.getFileWriter(out_file)
+    instances.foreach(instanceGraph => {
+      val instance = instanceGraph._1
+      val graph = instanceGraph._2
+      writer.write(instance._1)
+      writer.write("\t")
+      writer.write(instance._2)
+      writer.write("\t")
+      writer.write(if (instance._3) "1" else "-1")
+      writer.write("\t")
+      val graphStr = graph.map(edgeToString).mkString(interEdgeSeparator)
+      writer.write(graphStr)
+      writer.write("\n")
+    })
+    writer.close()
+  }
+
+  def edgeToString(edge: (String, String, String)): String = {
+    edge._1 + intraEdgeSeparator + edge._2 + intraEdgeSeparator + edge._3
   }
 
   def extractQuestions(filename: String): Seq[(String, String, Seq[String])] = {
