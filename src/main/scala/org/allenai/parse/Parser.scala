@@ -30,7 +30,7 @@ trait ParsedSentence {
 }
 
 case class PartOfSpeech(word: String, posTag: String)
-case class Dependency(head: String, dependent: String, label: String)
+case class Dependency(head: String, headIndex: Int, dependent: String, depIndex: Int, label: String)
 
 class StanfordParser extends Parser {
   val props = new Properties()
@@ -48,7 +48,8 @@ class StanfordParsedSentence(sentence: CoreMap) extends ParsedSentence {
   override def getDependencies() = {
     val deps = sentence.get(classOf[CollapsedCCProcessedDependenciesAnnotation]).typedDependencies
     deps.asScala.map(dependency => {
-      Dependency(dependency.gov.label.value, dependency.dep.label.value, dependency.reln.toString)
+      Dependency(dependency.gov.label.value, dependency.gov.index,
+        dependency.dep.label.value, dependency.dep.index, dependency.reln.toString)
     }).toSeq
   }
 

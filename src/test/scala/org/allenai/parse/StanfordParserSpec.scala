@@ -13,10 +13,10 @@ class StanfordParserSpec extends FlatSpecLike with Matchers {
     val dependencies = parse.getDependencies
     dependencies.size should be(4)
     dependencies.toSet should be(Set(
-      Dependency("eat", "People", "nsubj"),
-      Dependency("eat", "food", "dobj"),
-      Dependency("food", "good", "amod"),
-      Dependency("ROOT", "eat", "root")))
+      Dependency("eat", 2, "People", 1, "nsubj"),
+      Dependency("eat", 2, "food", 4, "dobj"),
+      Dependency("food", 4, "good", 3, "amod"),
+      Dependency("ROOT", 0, "eat", 2, "root")))
 
     val posTags = parse.getPosTags
     posTags.size should be(5)
@@ -34,10 +34,10 @@ class StanfordParserSpec extends FlatSpecLike with Matchers {
     val dependencies = parse.getDependencies
     dependencies.size should be(4)
     dependencies.toSet should be(Set(
-      Dependency("went", "Mary", "nsubj"),
-      Dependency("went", "store", "prep_to"),
-      Dependency("store", "the", "det"),
-      Dependency("ROOT", "went", "root")))
+      Dependency("went", 2, "Mary", 1, "nsubj"),
+      Dependency("went", 2, "store", 5, "prep_to"),
+      Dependency("store", 5, "the", 4, "det"),
+      Dependency("ROOT", 0, "went", 2, "root")))
 
   }
 }

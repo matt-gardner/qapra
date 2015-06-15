@@ -79,36 +79,49 @@ class DataProcessorSpec extends FlatSpecLike with Matchers {
 
   "getGraphFromQuestion" should "construct a decent graph" in {
     val edges = processor.getGraphFromQuestion(question1_history, 1)("Sandra is in the bathroom")
-    edges.toSet should contain theSameElementsAs Set(
-      ("Q1:is", "nsubj", "Q1:Sandra"),
-      ("Q1:is", "prep_in", "Q1:bathroom"),
-      ("Q1:bathroom", "det", "Q1:the"),
-      ("1:travelled", "nsubj", "1:Sandra"),
-      ("1:travelled", "prep_to", "1:office"),
-      ("1:office", "det", "1:the"),
-      ("2:went", "nsubj", "2:Sandra"),
-      ("2:went", "prep_to", "2:bathroom"),
-      ("2:bathroom", "det", "2:the"),
-      ("3:went", "nsubj", "3:Mary"),
-      ("3:went", "prep_to", "3:bedroom"),
-      ("3:bedroom", "det", "3:the"),
-      ("4:moved", "nsubj", "4:Daniel"),
-      ("4:moved", "prep_to", "4:hallway"),
-      ("4:hallway", "det", "4:the"),
-      ("Q1:Sandra", "instance", "1:Sandra"),
-      ("Q1:Sandra", "instance", "2:Sandra"),
-      ("Q1:Sandra", "last instance", "2:Sandra"),
-      ("2:Sandra", "last instance", "1:Sandra"),
-      ("Q1:bathroom", "instance", "2:bathroom"),
-      ("Q1:bathroom", "last instance", "2:bathroom"),
-      ("Q1:the", "instance", "1:the"),
-      ("Q1:the", "instance", "2:the"),
-      ("Q1:the", "instance", "3:the"),
-      ("Q1:the", "instance", "4:the"),
-      ("Q1:the", "last instance", "4:the"),
-      ("4:the", "last instance", "3:the"),
-      ("3:the", "last instance", "2:the"),
-      ("2:the", "last instance", "1:the")
+    val expected = Set(
+      ("Q1:KEEP:is", "nsubj", "Q1:REMOVE:Sandra"),
+      ("Q1:KEEP:is", "prep_in", "Q1:REMOVE:bathroom"),
+      ("Q1:REMOVE:bathroom", "det", "Q1:REMOVE:the"),
+      ("1:KEEP:travelled", "nsubj", "1:REMOVE:Sandra"),
+      ("1:KEEP:travelled", "prep_to", "1:REMOVE:office"),
+      ("1:REMOVE:office", "det", "1:REMOVE:the"),
+      ("2:KEEP:went", "nsubj", "2:REMOVE:Sandra"),
+      ("2:KEEP:went", "prep_to", "2:REMOVE:bathroom"),
+      ("2:REMOVE:bathroom", "det", "2:REMOVE:the"),
+      ("3:KEEP:went", "nsubj", "3:REMOVE:Mary"),
+      ("3:KEEP:went", "prep_to", "3:REMOVE:bedroom"),
+      ("3:REMOVE:bedroom", "det", "3:REMOVE:the"),
+      ("4:KEEP:moved", "nsubj", "4:REMOVE:Daniel"),
+      ("4:KEEP:moved", "prep_to", "4:REMOVE:hallway"),
+      ("4:REMOVE:hallway", "det", "4:REMOVE:the"),
+      ("Q1:REMOVE:Sandra", "instance", "1:REMOVE:Sandra"),
+      ("Q1:REMOVE:Sandra", "instance", "2:REMOVE:Sandra"),
+      ("Q1:REMOVE:Sandra", "last instance", "2:REMOVE:Sandra"),
+      ("2:REMOVE:Sandra", "last instance", "1:REMOVE:Sandra"),
+      ("Q1:REMOVE:bathroom", "instance", "2:REMOVE:bathroom"),
+      ("Q1:REMOVE:bathroom", "last instance", "2:REMOVE:bathroom"),
+      ("Q1:REMOVE:the", "instance", "1:REMOVE:the"),
+      ("Q1:REMOVE:the", "instance", "2:REMOVE:the"),
+      ("Q1:REMOVE:the", "instance", "3:REMOVE:the"),
+      ("Q1:REMOVE:the", "instance", "4:REMOVE:the"),
+      ("Q1:REMOVE:the", "last instance", "4:REMOVE:the"),
+      ("4:REMOVE:the", "last instance", "3:REMOVE:the"),
+      ("3:REMOVE:the", "last instance", "2:REMOVE:the"),
+      ("2:REMOVE:the", "last instance", "1:REMOVE:the")
     )
+    val missing = expected -- edges.toSet
+    if (missing.size != 0) {
+      println("Missing edges:")
+      println(missing)
+    }
+    val extra = edges.toSet -- expected
+    if (extra.size != 0) {
+      println("Extra edges:")
+      println(extra)
+    }
+    missing.size should be(0)
+    extra.size should be(0)
+    edges.toSet should contain theSameElementsAs expected
   }
 }
