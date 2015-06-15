@@ -99,6 +99,14 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
     candidates.toSet
   }
 
+  def shouldLexicalizeWord(posTag: String) = {
+    if (posTag.contains("VB")) {
+      true
+    } else {
+      false
+    }
+  }
+
   // TODO(matt): this is potentially question-dependent, and for now I'm just going to make this a
   // major hack, hard-coding conversions from various question types that I know are in the babi
   // dataset.
@@ -118,14 +126,20 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
 
     // Some processing of the question sentence, as it's an important part of the graph.
     val parsedQuestion = parser.parseSentence(questionSentence)
-    val questionWords = parsedQuestion.getPosTags.map(_.word).toSet
+    val questionPosTags = parsedQuestion.getPosTags
+    val questionWords = questionPosTags.map(_.word).toSet
     val lastOccurrences = new mutable.HashMap[String, String].withDefaultValue(null)
 
     // Now, first we add the dependency edges from the question sentence to the graph.
     parsedQuestion.getDependencies.foreach(dependency => {
       if (dependency.label != "root") {
-        edges += Tuple3(s"Q${questionIndex}:${dependency.head}", dependency.label,
-          s"Q${questionIndex}:${dependency.dependent}")
+        val headPosTag = questionPosTags(dependency.headIndex-1).posTag
+        val depPosTag = questionPosTags(dependency.depIndex-1).posTag
+        val keepHead = if (shouldLexicalizeWord(headPosTag)) "KEEP" else "REMOVE"
+        val keepDep = if (shouldLexicalizeWord(depPosTag)) "KEEP" else "REMOVE"
+        val headStr = s"Q${questionIndex}:${keepHead}:${dependency.head}"
+        val depStr = s"Q${questionIndex}:${keepDep}:${dependency.dependent}"
+        edges += Tuple3(headStr, dependency.label, depStr)
       }
     })
 
@@ -133,27 +147,39 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
     history.zipWithIndex.foreach(sentence_idx => {
       val index = sentence_idx._2 + 1
       val sentence = sentence_idx._1
+      val posTags = sentence.getPosTags
       sentence.getDependencies.foreach(dep => {
         if (dep.label != "root") {
-          edges += Tuple3(s"${index}:${dep.head}", dep.label, s"${index}:${dep.dependent}")
+          val headPosTag = posTags(dep.headIndex-1).posTag
+          val depPosTag = posTags(dep.depIndex-1).posTag
+          val keepHead = if (shouldLexicalizeWord(headPosTag)) "KEEP" else "REMOVE"
+          val keepDep = if (shouldLexicalizeWord(depPosTag)) "KEEP" else "REMOVE"
+          val headStr = s"${index}:${keepHead}:${dep.head}"
+          val depStr = s"${index}:${keepDep}:${dep.dependent}"
+          edges += Tuple3(headStr, dep.label, depStr)
         }
       })
-      sentence.getPosTags.foreach(posTag => {
+      posTags.foreach(posTag => {
         val word = posTag.word
         if (questionWords.contains(word)) {
-          edges += Tuple3(s"Q${questionIndex}:${word}", "instance", s"${index}:${word}")
+          val keepWord = if (shouldLexicalizeWord(posTag.posTag)) "KEEP" else "REMOVE"
+          val wordStr = s"${keepWord}:${word}"
+          edges += Tuple3(s"Q${questionIndex}:${wordStr}", "instance", s"${index}:${wordStr}")
           if (lastOccurrences(word) != null) {
-            edges += Tuple3(s"${index}:${word}", "last instance", lastOccurrences(word))
+            edges += Tuple3(s"${index}:${wordStr}", "last instance", lastOccurrences(word))
           }
-          lastOccurrences(word) = s"${index}:${word}"
+          lastOccurrences(word) = s"${index}:${wordStr}"
         }
       })
     })
 
     // Lastly, we add the remaining "last instance" edges.
-    questionWords.foreach(word => {
+    questionPosTags.foreach(posTag => {
+      val word = posTag.word
+      val keepWord = if (shouldLexicalizeWord(posTag.posTag)) "KEEP" else "REMOVE"
+      val wordStr = s"${keepWord}:${word}"
       if (lastOccurrences(word) != null) {
-        edges += Tuple3(s"Q${questionIndex}:${word}", "last instance", lastOccurrences(word))
+        edges += Tuple3(s"Q${questionIndex}:${wordStr}", "last instance", lastOccurrences(word))
       }
     })
 
