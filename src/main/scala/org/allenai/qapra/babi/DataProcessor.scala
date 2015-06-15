@@ -17,7 +17,7 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
 
   def createSplit(question_file: String, out_file: String) {
     val questions = extractQuestions(question_file)
-    val instances = questions.zipWithIndex.flatMap(question_idx => {
+    val instances = questions.zipWithIndex.par.flatMap(question_idx => {
       val question = question_idx._1
       val index = question_idx._2 + 1
       val source = getSourceNodeFromQuestion(question._1, index)
@@ -32,7 +32,7 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
         val instance = (source, s"Q${index}:${candidate}", isPositive)
         (instance, graph)
       })
-    })
+    }).seq
     val writer = fileUtil.getFileWriter(out_file)
     instances.foreach(instanceGraph => {
       val instance = instanceGraph._1
