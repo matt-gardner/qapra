@@ -29,7 +29,10 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
         val candidate = candidateGraph._1
         val graph = candidateGraph._2
         val isPositive = candidate == question._2
-        val instance = (source, s"Q${index}:${candidate}", isPositive)
+        // TODO(matt): kind of a hack.  I should return the POS tag with the candidate so this
+        // isn't such a hack.
+        val keep = if (shouldLexicalizeWord("NN")) "KEEP" else "REMOVE"
+        val instance = (source, s"Q${index}:${keep}:${candidate}", isPositive)
         (instance, graph)
       })
     }).seq
@@ -82,7 +85,8 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
   def getSourceNodeFromQuestion(question: String, index: Int): String = {
     val parsed = parser.parseSentence(question)
     val nouns = parsed.getPosTags.filter(_.posTag.contains("NN"))
-    s"Q${index}:${nouns(0).word}"
+    val keep = if (shouldLexicalizeWord(nouns(0).posTag)) "KEEP" else "REMOVE"
+    s"Q${index}:${keep}:${nouns(0).word}"
   }
 
   // TODO(matt): this is probably question-dependent.  For now, we're just getting all of the
