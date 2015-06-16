@@ -112,8 +112,11 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
   // dataset.
   def convertQuestionAnswerToSentence(_question: String)(answer: String): String = {
     val question = _question.substring(0, _question.size - 1)
-    if (question.split(" ").size == 3 && question.startsWith("Where is ")) {
-      question.split(" ").last + " is in the " + answer + "."
+    val questionParts = question.split(" ")
+    if (questionParts.size == 3 && question.startsWith("Where is ")) {
+      questionParts.last + " is in the " + answer + "."
+    } else if (questionParts.size == 4 && question.startsWith("Where is the ")) {
+      "The " + questionParts.last + " is in the " + answer + "."
     } else {
       throw new RuntimeException("This hackish method not finished yet!")
     }
