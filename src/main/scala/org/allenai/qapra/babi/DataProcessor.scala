@@ -168,10 +168,12 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
       })
       posTags.foreach(posTag => {
         val word = posTag.word
-        if (questionWords.contains(word)) {
+        if (posTag.posTag.contains("NN")) {
           val keepWord = if (shouldLexicalizeWord(posTag.posTag)) "KEEP" else "REMOVE"
           val wordStr = s"${keepWord}:${word}"
-          edges += Tuple3(s"Q${questionIndex}:${wordStr}", "instance", s"${index}:${wordStr}")
+          if (questionWords.contains(word)) {
+            edges += Tuple3(s"Q${questionIndex}:${wordStr}", "instance", s"${index}:${wordStr}")
+          }
           if (lastOccurrences(word) != null) {
             edges += Tuple3(s"${index}:${wordStr}", "last instance", lastOccurrences(word))
           }
@@ -183,9 +185,9 @@ class DataProcessor(fileUtil: FileUtil = new FileUtil) {
     // Lastly, we add the remaining "last instance" edges.
     questionPosTags.foreach(posTag => {
       val word = posTag.word
-      val keepWord = if (shouldLexicalizeWord(posTag.posTag)) "KEEP" else "REMOVE"
-      val wordStr = s"${keepWord}:${word}"
       if (lastOccurrences(word) != null) {
+        val keepWord = if (shouldLexicalizeWord(posTag.posTag)) "KEEP" else "REMOVE"
+        val wordStr = s"${keepWord}:${word}"
         edges += Tuple3(s"Q${questionIndex}:${wordStr}", "last instance", lastOccurrences(word))
       }
     })
