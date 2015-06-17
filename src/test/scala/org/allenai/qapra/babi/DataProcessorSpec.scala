@@ -34,7 +34,7 @@ class DataProcessorSpec extends FlatSpecLike with Matchers {
   val parser = new StanfordParser
 
   val question1_example = ("Where is Sandra?", "bathroom", Seq("Sandra travelled to the office.",
-    "Sandra went to the bathroom.", "Mary went to the bedroom.", "Daniel moved to the hallway."))
+    "Sandra went to the bathroom.", "Mary went to the bedroom.", "Mary moved to the hallway."))
   val question1_history = question1_example._3.map(s =>
       parser.parseSentence(s).asInstanceOf[ParsedSentence])
 
@@ -68,8 +68,8 @@ class DataProcessorSpec extends FlatSpecLike with Matchers {
 
   "getCandidatesFromHistory" should "find all nouns in the question history" in {
     val candidates = processor.getCandidatesFromHistory(question1_history)
-    candidates.size should be(7)
-    candidates should be(Set("Sandra", "Mary", "Daniel", "office", "bathroom", "bedroom", "hallway"))
+    candidates.size should be(6)
+    candidates should be(Set("Sandra", "Mary", "office", "bathroom", "bedroom", "hallway"))
   }
 
   "convertQuestionAnswerToSentence" should "convert 'where is' questions correctly" in {
@@ -92,23 +92,16 @@ class DataProcessorSpec extends FlatSpecLike with Matchers {
       ("3:KEEP:went", "nsubj", "3:REMOVE:Mary"),
       ("3:KEEP:went", "prep_to", "3:REMOVE:bedroom"),
       ("3:REMOVE:bedroom", "det", "3:REMOVE:the"),
-      ("4:KEEP:moved", "nsubj", "4:REMOVE:Daniel"),
+      ("4:KEEP:moved", "nsubj", "4:REMOVE:Mary"),
       ("4:KEEP:moved", "prep_to", "4:REMOVE:hallway"),
       ("4:REMOVE:hallway", "det", "4:REMOVE:the"),
       ("Q1:REMOVE:Sandra", "instance", "1:REMOVE:Sandra"),
       ("Q1:REMOVE:Sandra", "instance", "2:REMOVE:Sandra"),
       ("Q1:REMOVE:Sandra", "last instance", "2:REMOVE:Sandra"),
       ("2:REMOVE:Sandra", "last instance", "1:REMOVE:Sandra"),
+      ("4:REMOVE:Mary", "last instance", "3:REMOVE:Mary"),
       ("Q1:REMOVE:bathroom", "instance", "2:REMOVE:bathroom"),
-      ("Q1:REMOVE:bathroom", "last instance", "2:REMOVE:bathroom"),
-      ("Q1:REMOVE:the", "instance", "1:REMOVE:the"),
-      ("Q1:REMOVE:the", "instance", "2:REMOVE:the"),
-      ("Q1:REMOVE:the", "instance", "3:REMOVE:the"),
-      ("Q1:REMOVE:the", "instance", "4:REMOVE:the"),
-      ("Q1:REMOVE:the", "last instance", "4:REMOVE:the"),
-      ("4:REMOVE:the", "last instance", "3:REMOVE:the"),
-      ("3:REMOVE:the", "last instance", "2:REMOVE:the"),
-      ("2:REMOVE:the", "last instance", "1:REMOVE:the")
+      ("Q1:REMOVE:bathroom", "last instance", "2:REMOVE:bathroom")
     )
     val missing = expected -- edges.toSet
     if (missing.size != 0) {
