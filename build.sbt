@@ -8,6 +8,10 @@ scalacOptions ++= Seq("-unchecked", "-deprecation")
 
 javacOptions += "-Xlint:unchecked"
 
+fork in run := true
+
+javaOptions ++= Seq("-Xmx20g")
+
 libraryDependencies ++= Seq(
   "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test",
   "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3",

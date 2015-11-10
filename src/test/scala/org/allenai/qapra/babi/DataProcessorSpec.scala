@@ -63,7 +63,7 @@ class DataProcessorSpec extends FlatSpecLike with Matchers {
   }
 
   "getSourceNodeFromQuestion" should "return the right source node" in {
-    processor.getSourceNodeFromQuestion("Where is Sandra?", 1) should be("Q1:Sandra")
+    processor.getSourceNodeFromQuestion("Where is Sandra?", 1) should be("Q1:REMOVE:Sandra")
   }
 
   "getCandidatesFromHistory" should "find all nouns in the question history" in {
@@ -72,9 +72,23 @@ class DataProcessorSpec extends FlatSpecLike with Matchers {
     candidates should be(Set("Sandra", "Mary", "office", "bathroom", "bedroom", "hallway"))
   }
 
+  "matchesQuestionType17" should "match some example questions" in {
+    val q1 = "Is the red square below the pink rectangle"
+    val q2 = "Is the sphere to the left of the yellow triangle"
+    processor.matchesQuestionType17(q1, q1.split(" ")) should be(true)
+    processor.matchesQuestionType17(q2, q2.split(" ")) should be(true)
+  }
+
   "convertQuestionAnswerToSentence" should "convert 'where is' questions correctly" in {
     processor.convertQuestionAnswerToSentence("Where is Sandra?")("bathroom") should be(
       "Sandra is in the bathroom.")
+  }
+
+  it should "convert question 17 correctly" in {
+    processor.convertQuestionAnswerToSentence("Is the red square below the pink rectangle?")("yes") should be(
+      "The red square is below the pink rectangle.")
+    processor.convertQuestionAnswerToSentence("Is the sphere to the left of the yellow triangle?")("yes") should be(
+      "The sphere is to the left of the yellow triangle.")
   }
 
   "getGraphFromQuestion" should "construct a decent graph" in {
